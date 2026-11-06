@@ -1,0 +1,47 @@
+# @package _global_
+#
+# MNIST (Section 5.4). Each image is processed as a sequence of 28 rows, by the
+# four-SSM architecture of the appendix (rows, columns, and both reversed).
+#   D = 28 per SSM instance, n = 2, lr = 1e-2, 50 epochs, batch size 256.
+# Reproduces Table 3 together with `model=ig|sg|dg`.
+# Reported SSM parameter counts include all four instances.
+
+transformer_seed: 1
+data_seed: 1
+
+epochs: 50
+lr: 0.01
+
+training_batch_size: 256
+validation_batch_size: 256
+test_batch_size: 256
+
+dataset:
+  description: MNIST with the 2D structure preserved (images are not vectorized)
+  out_dir_name: mnist
+  name: mnist
+  shuffle: true
+  splitting_proportion: 0.1
+  splitting_seed: ${data_seed}
+  padding_idx: null
+  vocab_size: 0
+  # One label per image: top-1 accuracy.
+  task_type: classification
+
+model:
+  # Four SSM instances combined as in the two-filter smoothing architecture.
+  layer_name: layer_inspired_by_the_smoothing_problem
+  # Identity embedding: image rows/columns are used directly.
+  embedding: scale_pixel_embedding
+  out_layer: mlp_classifier
+  n_layer: 1
+  input_dim_classifier: 112
+  hidden_dim_classifier: 28
+  output_dim_classifier: 10
+  out_bias1_classifier: true
+  out_bias2_classifier: true
+  d_model: 28
+  # Each SSM instance sees one image row/column: D = 28.
+  d_inner: ${model.d_model}
+  # State dimension n.
+  d_state: 2

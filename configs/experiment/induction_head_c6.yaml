@@ -1,0 +1,52 @@
+# @package _global_
+#
+# SG with gate bias on induction head (Section C.6).
+# Experiment 1: "From scratch, 50 epochs"
+# Experiment 2: "Warm-started, 50 further epochs"
+#   |V| = 1024, L_seq = 128, D = 64, n = 8, lr = 3e-3, 50 epochs.
+
+transformer_seed: 1
+data_seed: 1
+
+epochs: 50
+lr: 0.003
+
+model_mode: load
+# Path to the best SG model trained WITHOUT bias
+pretrained_path: best_models/best_model_1.pt
+
+training_batch_size: 64
+validation_batch_size: 256
+test_batch_size: 256
+
+dataset:
+  description: Induction Head with fixed trigger (C6 Bias - Scratch and Warm-started)
+  out_dir_name: ih_c6
+  name: ih
+  # Sequences are already generated at random.
+  shuffle: false
+  batches_per_epoch: 10000
+  vocab_size: 1024
+  sequence_length: 128
+  sequence_trigger_length: 1
+  sequence_target_length: 1
+  # Number of random tokens forced between trigger and target.
+  sequence_noise_length: 0
+  # Index reserved for padding/blanks in the target sequence.
+  padding_idx: 0
+  # 1 = a single fixed trigger.
+  trigger_pool_size: 1
+  # Exact-match accuracy over the output sequence.
+  task_type: sequence
+
+model:
+  layer_name: only_ssm
+  embedding: trainable_quasi_ortho_init
+  out_layer: embedding_distance_decoder
+  n_layer: 1
+  # Embedding dimension D.
+  d_model: 64
+  # Isolated SSM block: input/output dimension equals D.
+  d_inner: ${ model.d_model }
+  # State dimension n.
+  d_state: 8

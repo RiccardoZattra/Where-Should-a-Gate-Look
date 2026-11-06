@@ -1,0 +1,26 @@
+# Root Hydra configuration.
+#
+# A run is fully specified by a task (`experiment=`) and a model (`model=`):
+#
+#   python training_script.py experiment=induction_head model=dg seed=1
+#
+# See README.md, Section "Reproducing the paper tables".
+
+num_workers: 4
+transformer_seed: 1
+data_seed: 1
+debug_every: 10
+
+defaults:
+  - _self_
+  - model: sg
+  - experiment: induction_head
+
+hydra:
+  run:
+    # Override Hydra's working directory.
+    dir: ./outputs/${dataset.out_dir_name}/${model.out_dir_name}/${slurm_job_id:}/
+  job_logging:
+    handlers:
+      file:
+        mode: w

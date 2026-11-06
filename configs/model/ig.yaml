@@ -1,0 +1,13 @@
+# @package model
+# IG -- input-gated model (Section 3.2).
+#   Delta^(i)(k) = diag( sigma( w_u^(i) u_i(k) ) )
+# SSM parameters: 3 n D.
+name: IG
+ssm_module: gated
+positive_transition: false
+gate_bias: false
+gating: ig
+out_dir_name: ig
+description: >
+  Input-gated (IG) selective SSM: the componentwise gate is computed from the
+  current input feature only. 3nD SSM parameters.

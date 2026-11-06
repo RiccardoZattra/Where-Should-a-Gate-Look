@@ -1,0 +1,13 @@
+# @package model
+# DG -- dual-gated model (Section 3.4).
+#   Delta^(i)(k) = diag( sigma( w_u^(i) u_i(k) + w_x^(i) o x^(i)(k-1) ) )
+# SSM parameters: 4 n D.
+name: DG
+ssm_module: gated
+positive_transition: false
+gate_bias: false
+gating: dg
+out_dir_name: dg
+description: >
+  Dual-gated (DG) selective SSM: the componentwise gate is computed jointly from
+  the current input feature and the previous state. 4nD SSM parameters.

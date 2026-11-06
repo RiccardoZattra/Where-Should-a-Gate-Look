@@ -1,0 +1,13 @@
+# @package model
+# SG -- state-gated model (Section 3.3).
+#   Delta^(i)(k) = diag( sigma( w_x^(i) o x^(i)(k-1) ) )
+# SSM parameters: 3 n D.
+name: SG
+ssm_module: gated
+positive_transition: false
+gate_bias: false
+gating: sg
+out_dir_name: sg
+description: >
+  State-gated (SG) selective SSM: the componentwise gate is computed from the
+  previous state. 3nD SSM parameters.

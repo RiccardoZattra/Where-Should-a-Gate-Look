@@ -1,0 +1,44 @@
+# @package _global_
+#
+# Selective Copying (Section 5.3), following the configuration of Gu & Dao 2023.
+#   A = 10, L_noise = 100, D = 64, n = 8, lr = 3e-3, 50 epochs.
+# Reproduces Table 2 together with `model=ig|sg|dg|s6`.
+# The number of content tokens M is reported for M in {2, 5}; always pass it
+# explicitly with `dataset.sequence_target_length=<M>`.
+
+transformer_seed: 1
+data_seed: 1
+
+epochs: 50
+lr: 0.003
+
+training_batch_size: 128
+validation_batch_size: 256
+test_batch_size: 256
+
+dataset:
+  description: Selective Copying
+  out_dir_name: selective_copying
+  name: selective_copying
+  shuffle: false
+  batches_per_epoch: 10000
+  # vocab_size = n_tokens + 2 (content 1..A, blank 0, marker A+1)
+  vocab_size: 12
+  # Alphabet size A.
+  n_tokens: 10
+  # Noise length L_noise.
+  sequence_noise_length: 100
+  # Number of content tokens M to be copied; overridden per table row.
+  sequence_target_length: 2
+  # vocab_size already covers every token, no padding index is needed.
+  padding_idx: null
+  task_type: sequence
+
+model:
+  layer_name: only_ssm
+  embedding: trainable_ortho_init
+  out_layer: embedding_distance_decoder
+  n_layer: 1
+  d_model: 64
+  d_inner: ${ model.d_model }
+  d_state: 8

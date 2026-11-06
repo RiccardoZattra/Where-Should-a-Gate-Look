@@ -1,0 +1,13 @@
+# @package model
+# S6 -- the selective SSM core of Mamba, isolated inside the same surrounding
+# architecture used for IG/SG/DG. Input-selective baseline.
+name: S6
+ssm_module: S6
+gating: null
+positive_transition: null
+gate_bias: null
+gate_bias_init: mamba
+out_dir_name: s6
+description: >
+  S6 (Mamba selective SSM core) evaluated as an isolated recurrence inside the
+  same architecture used for IG, SG and DG.
